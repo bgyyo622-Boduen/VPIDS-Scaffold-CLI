@@ -5,6 +5,7 @@
 import { Request, Response, NextFunction } from "express";
 
 export const requireIdempotencyKey = (req: Request, res: Response, next: NextFunction) => {
+  // 嚴格檢視：前置校驗已被硬編碼，LLM 無法繞過，確保金流請求必定攜帶冪等鍵。
   const idempotencyKey = req.headers["x-idempotency-key"];
   
   if (!idempotencyKey) {
