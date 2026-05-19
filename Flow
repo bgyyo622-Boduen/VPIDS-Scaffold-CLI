@@ -1,0 +1,81 @@
+# VPIDS Operational Workflow 
+# VPIDS 實戰操作流
+
+> This is not a standard agile workflow. It is a deterministic governance pipeline designed to confine the probabilistic nature of LLMs within formal architectural boundaries.
+> 這不是標準的敏捷開發流程。這是一條決定性的治理管線，旨在將 LLM 的機率本質禁錮於形式化的架構邊界內。
+
+---
+
+## Phase 1: Deploy the Anti-Corruption Sandbox / 部署防腐沙盒
+
+[EN]
+Do not allow the LLM to start from a blank canvas. The first step is to execute the CLI to generate the unalterable infrastructure and middleware boundaries.
+
+1. **Initialize the Project:** Run the VPIDS CLI in your terminal.
+   `npx vpids init secure-ecommerce-backend`
+2. **Verify the Topology:** The system will generate the Terraform configurations (forcing RDS into Private Subnets) and the Express.js middleware shells containing the `[VPIDS_GOVERNANCE_SHELL]` signature. The architectural baseline is now locked.
+
+[ZH]
+絕對不允許 LLM 從空白畫布開始生成。第一步是執行 CLI 工具，生成不可竄改的基礎設施與中介軟體邊界。
+
+1. **初始化專案：** 於終端機執行 VPIDS CLI。
+   `npx vpids init secure-ecommerce-backend`
+2. **驗證拓樸：** 系統將生成 Terraform 配置（強制 RDS 進入私有網段）以及帶有 `[VPIDS_GOVERNANCE_SHELL]` 標籤的 Express.js 中介軟體空殼。架構基準線至此鎖定。
+
+---
+
+## Phase 2: Constrained Prompting / 受限提示工程
+
+[EN]
+When instructing your AI assistant (e.g., Cursor, GitHub Copilot) to implement business logic, you must force it to operate *inside* the pre-generated shells.
+
+1. **Contextualize the AI:** Open the generated `bff/src/middlewares/idempotency-middleware.ts` in your IDE.
+2. **Inject the Strict Prompt:** Use the following instruction format to force the LLM to respect the boundaries:
+   > System: You are operating within the VPIDS governance framework.
+   > Task: Implement the Redis distributed lock logic inside the `requireIdempotencyKey` middleware.
+   > Constraint: You MUST NOT modify or remove the `[VPIDS_GOVERNANCE_SHELL]` signature. Do NOT remove the existing header validation. Only fill in the `// TODO (AI):` block.
+
+[ZH]
+當你指示 AI 助手（如 Cursor、GitHub Copilot）實作業務邏輯時，必須強迫其在預先生成的空殼「內部」運作。
+
+1. **賦予 AI 上下文：** 在 IDE 中打開已生成的 `bff/src/middlewares/idempotency-middleware.ts`。
+2. **注入嚴格提示詞：** 使用以下指令格式，強迫 LLM 遵守邊界：
+   > System: 你正在 VPIDS 治理框架下運行。
+   > Task: 在 `requireIdempotencyKey` 中介軟體內實作 Redis 分布式鎖邏輯。
+   > Constraint: 絕對禁止修改或移除 `[VPIDS_GOVERNANCE_SHELL]` 標籤。禁止移除現有的 Header 校驗。僅允許在 `// TODO (AI):` 區塊內填寫邏輯。
+
+---
+
+## Phase 3: Boundary Integrity Enforcement / 邊界完整性強制校驗
+
+[EN]
+LLMs suffer from "Security Blindness" and may hallucinate shortcuts that bypass your middleware. Before committing, you must run the mechanistic verification.
+
+1. **Execute the Enforcer:** Run the built-in integrity checker as a pre-commit hook.
+   `npx ts-node src/core/boundary-enforcer.ts ./bff/src/middlewares/idempotency-middleware.ts`
+2. **Evaluate the Result:** * If the LLM preserved the shells, the tool outputs `[VPIDS_VERIFIED]`.
+   * If the LLM deleted the security headers or the signature, it throws a `[VPIDS_FATAL]` error. You must reject the AI's code and regenerate.
+
+[ZH]
+LLM 患有「安全盲信」，極可能為了走捷徑而虛構出繞過中介軟體的邏輯。在提交代碼前，必須執行機制性驗證。
+
+1. **執行強制器：** 將內建的完整性校驗工具作為 pre-commit hook 執行。
+   `npx ts-node src/core/boundary-enforcer.ts ./bff/src/middlewares/idempotency-middleware.ts`
+2. **評估結果：** * 若 LLM 確實保留了外殼，工具將輸出 `[VPIDS_VERIFIED]`。
+   * 若 LLM 刪除了安全校驗或標籤，將拋出 `[VPIDS_FATAL]` 錯誤。你必須拒絕 AI 的產出並要求重寫。
+
+---
+
+## Phase 4: Zero Trust Delivery / 零信任交付
+
+[EN]
+Once the code passes local boundary enforcement, the final step bridges the local sandbox to the cloud-native supply chain security pipeline.
+
+1. **Push to Origin:** Execute `git push origin main`.
+2. **Automated Supply Chain Audit:** The pre-generated `.github/workflows/vpids-security-gate.yml` will automatically trigger. It will generate a Software Bill of Materials (SBOM) to mathematically prove the absence of AI-hallucinated malicious dependencies before deployment.
+
+[ZH]
+當程式碼通過本地邊界強制驗證後，最後一步是將本地沙盒橋接至雲原生供應鏈安全管線。
+
+1. **推送到遠端：** 執行 `git push origin main`。
+2. **自動化供應鏈稽核：** 預先生成的 `.github/workflows/vpids-security-gate.yml` 將自動觸發。它會生成軟體物料清單（SBOM），在數學層面上證明部署前不存在 AI 虛構的惡意第三方依賴套件。
