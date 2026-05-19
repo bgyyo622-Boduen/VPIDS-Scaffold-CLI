@@ -1,0 +1,24 @@
+{
+  "name": "vpids-scaffold",
+  "version": "1.0.0",
+  "description": "Zero Trust Vibe Coding CLI - Architecture Enforcer",
+  "main": "dist/index.js",
+  "bin": {
+    "vpids": "./bin/vpids.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "handlebars": "^4.7.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  },
+  "author": "Boduen Wang (Architectural Concept)",
+  "license": "MIT"
+}
