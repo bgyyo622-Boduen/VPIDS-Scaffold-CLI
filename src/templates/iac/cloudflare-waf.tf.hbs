@@ -1,0 +1,21 @@
+# [AICA_CONSTRAINT_ENFORCEMENT]
+# Edge protection MUST enforce Rate Limiting and Strict SSL.
+
+resource "cloudflare_ruleset" "rate_limiting_checkout" {
+  zone_id     = var.cloudflare_zone_id
+  name        = "Anti-Bot Checkout Protection"
+  description = "Block carding attacks on BFF checkout routes"
+  kind        = "zone"
+  phase       = "http_ratelimit"
+
+  rules {
+    action = "block"
+    ratelimit {
+      characteristics = ["ip.src"]
+      period          = 60
+      requests_per_period = 5
+      mitigation_timeout  = 600
+    }
+    expression = "(http.request.uri.path matches \"^/api/checkout/*\")"
+  }
+}
