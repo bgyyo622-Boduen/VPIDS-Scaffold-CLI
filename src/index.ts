@@ -16,12 +16,12 @@ program
   .action((projectName: string) => {
     console.log(`[VPIDS_GOVERNANCE] Initializing Zero Trust boundary for project: ${projectName}`);
     
-    // 顯式解析環境變數與路徑，拒絕底層的隱性耦合
+    // 嚴格檢視：所有環境依賴在此收斂，徹底消除下游模組的隱性耦合
     const currentWorkingDir = process.cwd();
     const projectOutputDir = path.join(currentWorkingDir, projectName);
     const templateRootDir = path.join(__dirname, "../src/templates");
 
-    // 依賴注入 (Dependency Injection)
+    // 嚴格檢視：透過建構子 (Constructor) 強制依賴注入
     const iacScaffolder = new IacScaffolder(projectName, projectOutputDir, templateRootDir);
     iacScaffolder.generateIsolationLayer();
 
