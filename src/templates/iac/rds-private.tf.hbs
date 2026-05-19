@@ -1,0 +1,19 @@
+# [AICA_CONSTRAINT_ENFORCEMENT]
+# Database MUST be isolated within a Private Subnet.
+# Direct internet access is strictly prohibited to prevent data exfiltration.
+
+resource "aws_db_instance" "{{projectName}}_postgres" {
+  identifier             = "{{projectName}}-db"
+  instance_class         = "db.t3.micro"
+  allocated_storage      = 20
+  engine                 = "postgres"
+  engine_version         = "15.3"
+  
+  # 零信任邊界：強制關閉公開存取
+  publicly_accessible    = false
+  db_subnet_group_name   = aws_db_subnet_group.private_subnets.name
+  vpc_security_group_ids = [aws_security_group.db_sg.id]
+  
+  storage_encrypted      = true
+  skip_final_snapshot    = false
+}
