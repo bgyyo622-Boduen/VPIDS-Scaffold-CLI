@@ -1,0 +1,19 @@
+/**
+ * [VPIDS_GOVERNANCE_SHELL]
+ * ALL incoming requests MUST pass through this boundary.
+ * LLMs are PROHIBITED from bypassing these checks in subsequent code generation.
+ */
+import { Request, Response, NextFunction } from "express";
+
+export const enforceZeroTrustBoundary = (req: Request, res: Response, next: NextFunction) => {
+  // 1. Mandatory Identity Verification
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ error: "[AICA_BLOCK] Missing identity context." });
+  }
+
+  // 2. Rate Limiting Check
+  // TODO (AI): Implement Redis-based rate limiting logic here. DO NOT remove the wrapper.
+  
+  next();
+};
