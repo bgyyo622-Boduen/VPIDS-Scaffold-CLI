@@ -1,0 +1,17 @@
+/**
+ * [VPIDS_GOVERNANCE_SHELL]
+ * Financial transactions MUST strictly verify Idempotency Keys to prevent duplicate processing.
+ */
+import { Request, Response, NextFunction } from "express";
+
+export const requireIdempotencyKey = (req: Request, res: Response, next: NextFunction) => {
+  const idempotencyKey = req.headers["x-idempotency-key"];
+  
+  if (!idempotencyKey) {
+    return res.status(400).json({ error: "[AICA_BLOCK] Idempotency Key is explicitly required for state-mutating operations." });
+  }
+
+  // TODO (AI): Implement distributed lock/cache check using the Idempotency Key. DO NOT remove the wrapper.
+  
+  next();
+};
